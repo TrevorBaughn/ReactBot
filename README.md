@@ -8,6 +8,7 @@ Right now, it's functionality is:
 
 # Taser Functionality
 `|shock <target> <shock_length>`
+
 The taser functionality is only possible if the Raspberry Pi on the client side has a taser set up. Taking the syntax above into account, the `target` is the person with the client, while the `shock_length` is the amount of time in hundreds of milliseconds to tase them for, maxing out at 500 milliseconds.
 
 # How to set up your own
