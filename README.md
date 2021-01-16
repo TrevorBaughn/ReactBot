@@ -13,9 +13,13 @@ The taser functionality is only possible if the Raspberry Pi on the client side 
 # How to set up your own
 <h1> Host </h1>
 1. Set up an internet connection and forward a port on a Raspberry Pi
+
 2. Clone the repository into your desired directory onto the Pi
+
 3. Be sure the Pi has Python 3.8+
+
 4. Remove "EXAMPLE" from "EXAMPLEconfig.ini" and fill out the ini file
+
 5. Run HostLauncher.py
 
 <h1> Client </h1>
