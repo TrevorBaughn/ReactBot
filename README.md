@@ -2,14 +2,15 @@
 The most innocent Discord bot.
 
 # What is it?
-InnocentBot is a Discord bot that follows my musings.  It has been made to be able to do all sorts of things through the power of networking and the Discord bot API.
+     InnocentBot is a Discord bot that follows my musings.  It has been made to be able to do all sorts of things through the power of networking and the Discord bot API.
 Right now, it's functionality is:
+
 -It can tase people.
 
 # Taser Functionality
 `|shock <target> <shock_length>`
 
-The taser functionality is only possible if the Raspberry Pi on the client side has a taser set up. Taking the syntax above into account, the `target` is the person with the client, while the `shock_length` is the amount of time in hundreds of milliseconds to tase them for, maxing out at 500 milliseconds.
+      The taser functionality is only possible if the Raspberry Pi on the client side has a taser set up. Taking the syntax above into account, the `target` is the person with the client, while the `shock_length` is the amount of time in hundreds of milliseconds to tase them for, maxing out at 500 milliseconds.
 
 # How to set up your own
 <h1> Host </h1>
