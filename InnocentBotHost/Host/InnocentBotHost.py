@@ -68,6 +68,7 @@ async def on_ready():
     print("Bot initialization complete...\n\n")
     
     #start listening for connections
+    print("Listening for connections...")
     check_for_connection.start()
 
 ########################### INITIALIZATION END - CLASSES ###########################
@@ -100,7 +101,6 @@ add_ons = ['taser','pwm_toggle','pwm_max']
 
 #listens for connections
 def listener():
-    print("Listening for connections...")
     attempting_to_connect = False
     try:
         #accept connection
@@ -122,7 +122,6 @@ def listener():
         print(f'{client_id.capitalize()} has connected.\n   Code: {Target.client[client_id].code}\n   Addr: {Target.client[client_id].addr}')
 
         #sending host version
-        print(client_version)
         c.send(client_version.encode())
         #input()
 
@@ -134,7 +133,6 @@ def listener():
             c.close()
         else:
             print("   Client version is the same, no need to update...")
-        print(check_version)
 
         #recieve add-ons
         for add_on in add_ons:
@@ -163,12 +161,27 @@ async def check_for_connection():
     pool = ThreadPool(processes=1)
     async_result = pool.apply_async(listener)
     #gets the client connections from the listener and sets the client connections outside it to be equal to it
-    return_client_list = async_result.get()
+    try:
+        return_client_list = async_result.get(timeout=1)
+    except:
+        return_client_list = Target.client
+        
     Target.client = return_client_list
-    print(Target.client)
 
 
 ###################################################################################
+
+@bot.command()
+async def debug(ctx, debugcommand='targetlist'):
+    if debugcommand == 'targetlist':
+        debug_message = f"Target Dictionary:\n `{Target.client}`"
+
+    print(debug_message)
+    await ctx.channel.send(debug_message)
+
+
+
+
 
 @bot.command()
 async def shock(ctx, target, shock_length, pwm_level='None'): #pwm_level is a string so that it sends over socket
@@ -221,7 +234,7 @@ async def shock_error(ctx, error):
         await ctx.channel.send(f"```\nError:\nClient not connected to server...\nPlease try again later.\n```")
         print("Error:\n  Client not connected to server")
     elif not isinstance(error, commands.DisabledCommand):
-        await ctx.channel.send(f"```\nError:\n{error}\nCorrect syntax is as follows:\n|shock <target> <shock length>\nValid Targets: {shock_targets}\nValid Shock Lengths: 1-5\n```")
+        await ctx.channel.send(f"```\nError:\n{error}\nCorrect syntax is as follows:\n|shock <target> <shock length>\nValid Shock Lengths: 1-5\n```")
     else:
         await ctx.channel.send(f"```\nError:\n{error}\nPlease try again later.\n```")
 
