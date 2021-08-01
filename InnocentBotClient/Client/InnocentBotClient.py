@@ -127,7 +127,7 @@ def connect_to_server():
             print("     Sending Add-ons...")
             for add_on in add_ons:
                 s.send(str(eval(add_ons[add_on])).encode())
-
+                print(str(eval(add_ons[add_on])))
             print("     Sent Add-ons")
 
             #send ready message (important for breaking off for loop)
@@ -161,7 +161,7 @@ while True:
     except:
         print("Failed to receive anything... likely a disconnect...")
         connect_to_server()
-        receive = ['weeee'] #prevents from crash when unable to receive (especially after disconnect)
+        receive = ['8=D'] #prevents from crash when unable to receive (especially after disconnect)
 
     task = receive[0]
     if task == 'get_shock_perms':

@@ -139,7 +139,8 @@ def listener():
         #recieve add-ons
         for add_on in add_ons:
             exec(f'Target.client[client_id].{add_on} = c.recv(1024).decode()')
-            print(f"{Target.client[client_id].eval(add_on)}")
+            exec(f"print(Target.client[client_id].{add_on})")
+            
 
         #ready message
         ready = c.recv(1024).decode()
@@ -213,25 +214,16 @@ async def shock(ctx, target, shock_length, pwm_level='None'): #pwm_level is a st
     #send tase instruction to client
     Target.client[target].code.send(f"taser {shock_length} {pwm_level}")
 
-#@shock.error
-#sync def shock_error(ctx, error):
-#    print(f'Shock Error:\n  {error}')
-#    if str(error) == "Command raised an exception: ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host":
-#        await ctx.channel.send(f"```\nError:\nClient not connected to server...\nPlease try again later.\n```")
-#        print("Error:\n  Client not connected to server")
-#    elif not isinstance(error, commands.DisabledCommand):
-#        await ctx.channel.send(f"```\nError:\n{error}\nCorrect syntax is as follows:\n|shock <target> <shock length>\nValid Targets: {shock_targets}\nValid Shock Lengths: 1-5\n```")
-#    else:
-#        await ctx.channel.send(f"```\nError:\n{error}\nPlease try again later.\n```")
-
-
-
-
-
-
-
-
-
+@shock.error
+async def shock_error(ctx, error):
+    print(f'Shock Error:\n  {error}')
+    if str(error) == "Command raised an exception: ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host":
+        await ctx.channel.send(f"```\nError:\nClient not connected to server...\nPlease try again later.\n```")
+        print("Error:\n  Client not connected to server")
+    elif not isinstance(error, commands.DisabledCommand):
+        await ctx.channel.send(f"```\nError:\n{error}\nCorrect syntax is as follows:\n|shock <target> <shock length>\nValid Targets: {shock_targets}\nValid Shock Lengths: 1-5\n```")
+    else:
+        await ctx.channel.send(f"```\nError:\n{error}\nPlease try again later.\n```")
 
 bot.run(discord_token)
 
