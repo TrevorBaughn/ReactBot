@@ -168,9 +168,9 @@ while True:
         print('Request for shock permissions...')
         print('Sending shock perms...')
         shock_switch = 1#str(GPIO.input(2))
-        s.send(shock_switch.encode())
+        s.send(str(shock_switch).encode())
         print('Sent shock perms')
-    if task == 'taser':
+    elif task == 'taser':
         print('taser')
 
 s.close()

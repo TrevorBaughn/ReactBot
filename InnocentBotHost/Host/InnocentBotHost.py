@@ -175,7 +175,7 @@ async def check_for_connection():
 async def debug(ctx, debugcommand='targetlist'):
     if debugcommand == 'targetlist':
         debug_message = f"Target Dictionary:\n `{Target.client}`"
-
+    
     print(debug_message)
     await ctx.channel.send(debug_message)
 
@@ -191,7 +191,7 @@ async def shock(ctx, target, shock_length, pwm_level='None'): #pwm_level is a st
     target = target.lower()
 
     #check taser perms for target
-    if Target.client[target].taser != True:
+    if bool(Target.client[target].taser) != True:
         raise commands.UserInputError(message = f"UserError: target '{target}' not a valid target")
 
     #get perms
@@ -199,11 +199,11 @@ async def shock(ctx, target, shock_length, pwm_level='None'): #pwm_level is a st
     shock_switch = Target.client[target].code.recv(1024).decode()
     
     #check shock perms
-    if shock_switch != 1:
+    if int(shock_switch) != 1:
         raise commands.CommandOnCooldown(message= f"CommandOnCooldown: target '{target}' has their shock switch turned off")
 
     #make sure shock length is within range
-    if shock_length <= 0 or shock_length > 5:
+    if int(shock_length) <= 0 or int(shock_length) > 5:
         raise commands.UserInputError(message= f"UserInputError: shock length must be within 0-500 milliseconds")
 
     #check to see if target has PWM
@@ -215,17 +215,17 @@ async def shock(ctx, target, shock_length, pwm_level='None'): #pwm_level is a st
     print(f'  Target: {target.capitalize()}')
     print(f'  Shock Length: {shock_length}')
     print(f'  PWM: {pwm_level}')
-    message = f"""############################
+    use_message = f"""############################
     ***The taser has been activated.***
     Target: {target.capitalize()}
     Shock: Length: {shock_length} milliseconds
     PWM: {pwm_level}
     Screams: Loud
-    ############################"""
-    await ctx.channel.send(message)
+############################"""
+    await ctx.channel.send(use_message)
 
     #send tase instruction to client
-    Target.client[target].code.send(f"taser {shock_length} {pwm_level}")
+    Target.client[target].code.send(f"taser {shock_length} {pwm_level}".encode())
 
 @shock.error
 async def shock_error(ctx, error):
@@ -234,7 +234,7 @@ async def shock_error(ctx, error):
         await ctx.channel.send(f"```\nError:\nClient not connected to server...\nPlease try again later.\n```")
         print("Error:\n  Client not connected to server")
     elif not isinstance(error, commands.DisabledCommand):
-        await ctx.channel.send(f"```\nError:\n{error}\nCorrect syntax is as follows:\n|shock <target> <shock length>\nValid Shock Lengths: 1-5\n```")
+        await ctx.channel.send(f"```\nError:\n{error}\nCorrect syntax is as follows:\n|shock <target> <shock length> [pwm level]\nValid Shock Lengths: 1-5\n```")
     else:
         await ctx.channel.send(f"```\nError:\n{error}\nPlease try again later.\n```")
 
