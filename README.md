@@ -1,4 +1,4 @@
-# InnocentBot is a work in progress and does not yet have a stable version
+# InnocentBot Prototype (AKA ReactBot)
 
 # InnocentBot
 The most innocent Discord bot.
